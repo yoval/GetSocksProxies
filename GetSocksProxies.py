@@ -8,9 +8,6 @@ curl --socks4 131.196.143.123:50489 http://ifcfg.co
 from bs4 import BeautifulSoup
 import pymongo,requests,re,random,time,json
 
-
-
-
 BilibiliIpUrl = 'https://api.live.bilibili.com/ip_service/v1/ip_service/get_ip_addr'
 MyProxiesList = [{}, {'https': 'Socks5://144.34.181.207:1080'},{'https': 'Socks5://104.224.132.132:1080'}]
 
