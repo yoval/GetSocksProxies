@@ -15,6 +15,7 @@ while True:
     myclient  = pymongo.MongoClient('mongodb://fuwenyue:pass4Top@ds029638.mlab.com:29638/socks_proxies')
     mydb = myclient['socks_proxies']
     ProxiesCol = mydb['ProxiesNotChecked']
+    ProxiesHub = mydb['ProxiesHub']
     while True :
         print('正在尝试连接……')
         try :
@@ -28,6 +29,7 @@ while True:
     IpTable = Soup.select('#proxylisttable > tbody > tr')
     IpList = [re.findall('<td>(.*?)</td>',str(IpRow)) for IpRow in IpTable]                      
     ProxiesList = [{'https':'%s://%s:%s'%(Ip[3],Ip[0],Ip[1])} for Ip in IpList]
-    y = ProxiesCol.insert_many(ProxiesList)        
+    y = ProxiesCol.insert_many(ProxiesList) 
+    ProxiesHub.insert_many(ProxiesList)       
     print('保存ID: ',y.inserted_ids)        
     time.sleep(3600)
