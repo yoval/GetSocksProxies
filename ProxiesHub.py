@@ -8,12 +8,12 @@ import time,pymongo,requests,random,re,json
 from bs4 import BeautifulSoup
 
 
-BilibiliIpUrl = 'https://api.live.bilibili.com/ip_service/v1/ip_service/get_ip_addr'
-
 while True:
     myclient  = pymongo.MongoClient('mongodb://fuwenyue:pass4Top@ds029638.mlab.com:29638/socks_proxies')
     mydb = myclient['socks_proxies']
     ProxiesHub = mydb['ProxiesHub']
+    SavedProxiesList = ProxiesHub.find({},{ "_id": 0, "https": 1}).sort('update',-1)
+    SavedProxiesList = [Proxies for Proxies in SavedProxiesList]
     while True :
         print('正在尝试连接……')
         try :
@@ -25,8 +25,16 @@ while True:
             time.sleep(2)
     Soup = BeautifulSoup(Response.text, 'lxml')       
     IpTable = Soup.select('#proxylisttable > tbody > tr')
-    IpList = [re.findall('<td>(.*?)</td>',str(IpRow)) for IpRow in IpTable]                      
+    IpList = [re.findall('<td>(.*?)</td>',str(IpRow)) for IpRow in IpTable]                   
     ProxiesList = [{'https':'%s://%s:%s'%(Ip[3],Ip[0],Ip[1]),'Country':Ip[2]} for Ip in IpList]
-    y = ProxiesHub.insert_many(ProxiesList)       
-    print('保存ID: ',y.inserted_ids)        
+    for Proxies in ProxiesList :
+        PROXIES = {'https':Proxies['https']}
+        if PROXIES not in SavedProxiesList :
+            x = ProxiesHub.insert_one(Proxies)
+            print('保存ID :',x.inserted_id)
+        else :
+            print('代理已存在，跳过')
+#    break
     time.sleep(300)
+    
+    

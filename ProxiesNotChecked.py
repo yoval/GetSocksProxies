@@ -14,7 +14,6 @@ BilibiliIpUrl = 'https://api.live.bilibili.com/ip_service/v1/ip_service/get_ip_a
 while True:
     myclient  = pymongo.MongoClient('mongodb://fuwenyue:pass4Top@ds029638.mlab.com:29638/socks_proxies')
     mydb = myclient['socks_proxies']
-    ProxiesCol = mydb['ProxiesNotChecked']
     ProxiesHub = mydb['ProxiesHub']
     while True :
         print('正在尝试连接……')
