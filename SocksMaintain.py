@@ -6,15 +6,15 @@ Created on Wed Apr 29 22:12:16 2020
 """
 import requests,pymongo,time
 
+Con=0
 BilibiliIpUrl = 'https://api.live.bilibili.com/ip_service/v1/ip_service/get_ip_addr'
 myclient  = pymongo.MongoClient('mongodb://fuwenyue:pass4Top@ds049446.mlab.com:49446/proxy',retryWrites='false')
 mydb = myclient['proxy']
 ProxiesCol = mydb['socks']
-ProxiesList = ProxiesCol.find({},{ "_id": 0, "https": 1}).sort('update',-1)
-ProxiesList = [Proxies for Proxies in ProxiesList]
-print('数据库中有%s个代理，即将进行重复删除……'%len(ProxiesList))
-Con=0
-for i in range(3):
+for i in range(5):
+    ProxiesList = ProxiesCol.find({},{ "_id": 0, "https": 1}).sort('update',-1)
+    ProxiesList = [Proxies for Proxies in ProxiesList]
+    print('数据库中有%s个代理，即将进行重复删除……'%len(ProxiesList))
     Con+=1
     print('正在进行第%s次重复查询'%Con)
     for Proxies in ProxiesList :
